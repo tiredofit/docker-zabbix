@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+
+while [ ! -f /tmp/state/99-container-init ]
+do
+  sleep 1
+done
+
+### Start Zabbix
+echo ''
+echo '** [zabbix-proxy] Starting Zabbix Proxy'
+
+exec s6-setuidgid zabbix zabbix_proxy -f;
