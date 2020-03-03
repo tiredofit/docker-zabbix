@@ -20,6 +20,7 @@
 ### Debug Mode
   if [ "$DEBUG_MODE" = "TRUE" ] || [ "$DEBUG_MODE" = "true" ];  then
     ZABBIX_PROXY_DEBUG_LEVEL=4
+    set -x
   fi
 
 ### Check to see if Enabled/Disabled
@@ -38,19 +39,19 @@
     sed -i -e "s/<ZABBIX_PROXY_ALLOW_ROOT>/$ZABBIX_PROXY_ALLOW_ROOT/g" /etc/zabbix/zabbix_proxy.conf
     sed -i -e "s/<ZABBIX_PROXY_USER>/$ZABBIX_PROXY_USER/g" /etc/zabbix/zabbix_proxy.conf
   
-    mkdir -p ${ZABBIX_LOGFILE%/*}
-    chown -R $ZABBIX_USER ${ZABBIX_LOGFILE%/*}
-    chown -R $ZABBIX_USER /etc/zabbix/
+    mkdir -p /var/log/zabbix
+    chown -R $ZABBIX_PROXY_USER /var/log/zabbix
+    chown -R $ZABBIX_PROXY_USER /etc/zabbix/
 
     if [ -d /assets/externalscripts ] ; then
        cp -R /assets/externalscripts/* /usr/lib/zabbix/externalscripts
-       chown -R $ZABBIX_USER /usr/lib/zabbix/externalscripts
+       chown -R $ZABBIX_PROXY_USER /usr/lib/zabbix/externalscripts
        chmod -R 0755 /usr/lib/zabbix/externalscripts
     fi
 
     if [ -d /assets/alertscripts ] ; then
        cp -R /assets/alertscripts/* /usr/lib/zabbix/alertscripts
-       chown -R $ZABBIX_USER /usr/lib/zabbix/alertscripts
+       chown -R $ZABBIX_PROXY_USER /usr/lib/zabbix/alertscripts
        chmod -R 0755 /usr/lib/zabbix/alertscripts
     fi
 

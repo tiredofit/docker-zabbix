@@ -1,0 +1,31 @@
+#!/usr/bin/with-contenv bash
+
+for s in /assets/functions/*; do source $s; done
+PROCESS_NAME="zabbix-frontend"
+check_service_initialized init 20-php-fpm
+
+sanity_var DB_TYPE "Database Type"
+sanity_var DB_SCHEMA "Database Schema"
+sanity_db
+
+cat <<EOF > /usr/share/webapps/zabbix/conf/zabbix.conf.php
+<?php
+// Zabbix GUI configuration file.
+global \$DB;
+
+\$DB['TYPE']		= '$DB_TYPE';
+\$DB['SERVER']		= '$DB_HOST';
+\$DB['PORT']		= '$DB_PORT';
+\$DB['DATABASE']	= '$DB_NAME';
+\$DB['USER']		= '$DB_USER';
+\$DB['PASSWORD']	= '$DB_PASS';
+\$DB['SCHEMA']		= '$DB_SCHEMA';
+
+\$ZBX_SERVER   		= '$ZABBIX_SERVER_ACTIVE';
+\$ZBX_SERVER_PORT 	= '$ZABBIX_SERVER_PORT';
+\$ZBX_SERVER_NAME 	= '$ZABBIX_SERVER_NAME';
+
+\$IMAGE_FORMAT_DEFAULT	= IMAGE_FORMAT_PNG;
+EOF
+
+liftoff

@@ -1,8 +1,8 @@
 version: '2'
 services:
     zabbix-example-com-server:
-      container_name: zabbix-selfdesign-server
-      image: tiredofit/zabbix/zabbix-server:latest
+      container_name: zabbix-example-server
+      image: tiredofit/zabbix-server:latest
       #ports:
         #- 172.22.0.201:10051:10051
       volumes:
@@ -90,7 +90,7 @@ services:
 
     zabbix-example-com-app:
       container_name: zabbix-example-com-app
-      image: tiredofit/zabbix/zabbix-frontend:latest
+      image: tiredofit/zabbix-frontend:latest
       links:
         - zabbix-example-com-db
         - zabbix-example-com-server

@@ -1,3 +1,9 @@
+## 2.0.0 2020-01-02 <dave at tiredofit dot ca>
+
+   ### Added
+      - Support for new tiredofit/alpine, tiredofit/nginx, tiredofit/nginx-php-fpm base images
+
+
 ## 1.1 2018-02-03 <dave at tiredofit dot ca>
 
 * Login Issue

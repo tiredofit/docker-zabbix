@@ -1,3 +1,11 @@
+## 2.7 2018-11-11 <dave at tiredofit dot ca>
+
+* Revert back to Alpine 3.8 due to poor 4.0.1 upgrades
+
+## 2.6 2018-10-21 <dave at tiredofit dot ca>
+
+* Fixup of Startup script to set proper permissions
+
 ## 2.5 2018-02-02 <dave at tiredofit dot ca>
 
 * Fix SSL Cert Script

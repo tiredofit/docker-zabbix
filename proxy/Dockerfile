@@ -7,8 +7,10 @@ ENV ENABLE_SMTP=false
 ### Add Build Dependencies
 RUN set -x && \
     apk update && \
+    apk upgrade && \
     apk add iputils \
             jwhois \
+            net-snmp-libs \
             nmap \
             openssl \
             python3 \
