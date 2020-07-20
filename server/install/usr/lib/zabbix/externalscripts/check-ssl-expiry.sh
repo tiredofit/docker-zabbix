@@ -16,6 +16,4 @@ if [ -n "$cert_data" ] ; then
 	echo $DAYS
 else
 	exit 124
-fi 
-
-
+fi

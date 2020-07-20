@@ -1,0 +1,12 @@
+#!/usr/bin/with-contenv bash
+
+source /assets/functions/00-container
+prepare_service defaults single
+PROCESS_NAME="zabbix-proxy"
+
+check_container_initialized
+check_service_initialized init
+liftoff
+
+print_info "Starting Zabbix Proxy"
+exec s6-setuidgid zabbix zabbix_proxy -f;

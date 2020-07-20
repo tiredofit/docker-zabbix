@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv bash
+
+PHP_TZ=${PHP_TZ:-"America/Vancouver"}
+ZABBIX_ETC_DIR="/etc/zabbix"
+ZABBIX_USER_HOME_DIR="/var/lib/zabbix"
+ZBX_SERVER_HOST=${ZBX_SERVER_HOST:-"zabbix-server"}
+ZBX_SERVER_NAME=${ZBX_SERVER_NAME:-"Zabbix Server"}
+ZBX_SERVER_PORT=${ZBX_SERVER_PORT:-"10051"}
+zbx_db_type="postgresql"
+zbx_type="server"
