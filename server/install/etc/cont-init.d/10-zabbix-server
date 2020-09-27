@@ -44,12 +44,14 @@ prepare_system "$zbx_type" "$zbx_opt_type"
 clear_deploy "$zbx_type"
 
 if [ -d /assets/externalscripts ]; then
+    mkdir -p /usr/lib/zabbix/externalscripts
     cp -R /assets/externalscripts/* /usr/lib/zabbix/externalscripts
     chown -R "$ZABBIX_USER" /usr/lib/zabbix/externalscripts
     chmod -R 0755 /usr/lib/zabbix/externalscripts
 fi
 
 if [ -d /assets/alertscripts ]; then
+    mkdir -p /usr/lib/zabbix/alertscripts
     cp -R /assets/alertscripts/* /usr/lib/zabbix/alertscripts
     chown -R "$ZABBIX_USER" /usr/lib/zabbix/alertscripts
     chmod -R 0755 /usr/lib/zabbix/alertscripts

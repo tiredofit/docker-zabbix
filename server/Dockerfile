@@ -9,7 +9,7 @@ RUN set -x && \
     apk update && \
     apk upgrade && \
     apk add iputils \
-            jwhois \
+            #jwhois \
             nmap \
             openssl \
             postgresql-client \
@@ -21,7 +21,7 @@ RUN set -x && \
             && \
     mkdir -p /var/lib/zabbix && \
     chown -R zabbix:zabbix /var/lib/zabbix && \
-
+    \
     rm -rf /var/cache/apk/*
 
 ADD install /
