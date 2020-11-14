@@ -9,7 +9,6 @@ RUN set -x && \
     apk update && \
     apk upgrade && \
     apk add iputils \
-            #jwhois \
             nmap \
             openssl \
             postgresql-client \
@@ -17,6 +16,7 @@ RUN set -x && \
             py3-openssl \
             py3-pip \
             py3-requests \
+            whois \
             zabbix-pgsql \
             && \
     mkdir -p /var/lib/zabbix && \

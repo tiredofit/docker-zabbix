@@ -1,3 +1,9 @@
+## 2.7.1 2020-11-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - Switch to Whois instead of Jwhois
+
+
 ## 2.7 2018-11-11 <dave at tiredofit dot ca>
 
 * Revert back to Alpine 3.8 due to poor 4.0.1 upgrades
