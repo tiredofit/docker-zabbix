@@ -8,5 +8,5 @@ check_container_initialized
 check_service_initialized init
 liftoff
 
-print_info "Starting Zabbix Proxy"
+print_start "Starting Zabbix Proxy"
 exec s6-setuidgid zabbix zabbix_proxy -f;

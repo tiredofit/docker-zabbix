@@ -1,8 +1,8 @@
-FROM tiredofit/alpine:edge
+FROM tiredofit/alpine:3.14
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults
-ENV ENABLE_SMTP=false
+ENV CONTAINER_ENABLE_MESSAGING=FALSE
 
 ### Add Build Dependencies
 RUN set -x && \

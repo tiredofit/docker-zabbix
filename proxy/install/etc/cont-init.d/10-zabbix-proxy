@@ -43,7 +43,7 @@ if var_true $ENABLE_ZABBIX; then
 
 else
   print_debug "Disabling Zabbix Proxy"
-  service_stop 10-zabbix-proxy
+  service_stop $(basename $0)
 fi
 
 liftoff
