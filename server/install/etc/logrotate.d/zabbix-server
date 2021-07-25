@@ -1,9 +1,0 @@
-/var/log/zabbix/*.log {
-    daily
-    ifempty
-    rotate 7
-    missingok
-    copytruncate
-    compress
-    dateext
-}

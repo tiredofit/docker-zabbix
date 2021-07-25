@@ -1,10 +1,11 @@
-version: '2'
+version: '2.4'
 services:
+    
     zabbix-example-com-server:
-      container_name: zabbix-example-server
-      image: tiredofit/zabbix-server:latest
-      #ports:
-        #- 172.22.0.201:10051:10051
+      image: tiredofit/zabbix:latest
+      container_name: zabbix-selfdesign-server
+      ports:
+        - 127.0.0.1:10051:10051
       volumes:
         - ./assets/externalscripts:/assets/externalscripts
         - ./assets/alertscripts:/assets/alertscripts
@@ -12,11 +13,8 @@ services:
         - ./data/var/lib/zabbix/enc:/var/lib/zabbix/enc
         - ./data/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys
         - ./data/var/lib/zabbix/mibs:/var/lib/zabbix/mibs
-      #volumes_from:
-        #- zabbix-example-com-snmptraps:ro
       links:
         - zabbix-example-com-db
-        #- zabbix-example-com-java-gateway
       ulimits:
         nproc: 65535
         nofile:
@@ -24,139 +22,87 @@ services:
           hard: 40000
         #mem_limit: 512m
       environment:
-       #- ZBX_LISTENIP=
-        - ZBX_DEBUGLEVEL=2
-        - ZBX_STARTPOLLERS=5
-       #- ZBX_IPMIPOLLERS=0
-       #- ZBX_STARTPOLLERSUNREACHABLE=1
-        - ZBX_STARTTRAPPERS=5
-        - ZBX_STARTPINGERS=1
-       #- ZBX_STARTDISCOVERERS=1
-        - ZBX_STARTHTTPPOLLERS=1
-        - ZBX_STARTTIMERS=2
-        - ZBX_STARTALERTERS=2
-       #- ZBX_STARTESCALATORS=1
-        - ZBX_JAVAGATEWAY_ENABLE=false
-        - ZBX_JAVAGATEWAY=zabbix-example-com-java-gateway
-       #- ZBX_JAVAGATEWAYPORT=10052
-        - ZBX_STARTJAVAPOLLERS=1
-       #- ZBX_STARTVMWARECOLLECTORS=0
-       #- ZBX_VMWAREFREQUENCY=60
-       #- ZBX_VMWAREPERFFREQUENCY=60
-       #- ZBX_VMWARECACHESIZE=8M
-       #- ZBX_VMWARETIMEOUT=10
-        - ZBX_ENABLE_SNMP_TRAPS=false
-       #- ZBX_SOURCEIP=
-        - ZBX_HOUSEKEEPINGFREQUENCY=1
-        - ZBX_MAXHOUSEKEEPERDELETE=100000
-       #- ZBX_SENDERFREQUENCY=30
-        - ZBX_CACHESIZE=32M
-       #- ZBX_CACHEUPDATEFREQUENCY=60
-       #- ZBX_STARTDBSYNCERS=4
-       #- ZBX_HISTORYCACHESIZE=16M
-       #- ZBX_HISTORYINDEXCACHESIZE=4M
-       #- ZBX_TRENDCACHESIZE=4M
-        - ZBX_VALUECACHESIZE=12M
-       #- ZBX_TIMEOUT=4
-       #- ZBX_TRAPPERIMEOUT=300
-       #- ZBX_UNREACHABLEPERIOD=45
-       #- ZBX_UNAVAILABLEDELAY=60
-       #- ZBX_UNREACHABLEDELAY=15
-       #- ZBX_LOGSLOWQUERIES=3000
-        - ZBX_STARTPROXYPOLLERS=4
-        - ZBX_PROXYCONFIGFREQUENCY=3600
-       #- ZBX_PROXYDATAFREQUENCY=1
-       #- ZBX_LOADMODULE="dummy1.so,dummy2.so,dummy10.so"
-       #- ZBX_TLSCAFILE=
-       #- ZBX_TLSCRLFILE=
-       #- ZBX_TLSCERTFILE=
-       #- ZBX_TLSKEYFILE=
- 
-        - DB_SERVER_HOST=zabbix-example-com-db
-        - DB_SERVER_PORT=5432
-        - POSTGRES_USER=zabbix
-        - POSTGRES_PASSWORD=securepassword
-        - POSTGRES_DB=zabbix
-        - ZBX_DBSCHEMA=public
+        - TIMEZONE=America/Vancouver
+        - ZABBIX_MODE=SERVER
+        - ZABBIX_HOSTNAME=zabbix-example-com-server
+
+        - DB_HOST=zabbix-example-com-db
+        - DB_PORT=5432
+        - DB_NAME=zabbix
+        - DB_PASS=password
+        - DB_USER=zabbix
+        - DB_SCHEMA=public
       user: root
       networks:
-        proxy-tier: 
-        zbx_net:
+        services:
           aliases:
             - zabbix-server
-            - zabbix-server-pgsql
-            - zabbix-server-alpine-pgsql
-            - zabbix-server-pgsql-alpine
+      restart: always
 
-    zabbix-example-com-app:
-      container_name: zabbix-example-com-app
-      image: tiredofit/zabbix-frontend:latest
+    zabbix-example.com-app:
+      image: tiredofit/zabbix:latest
+      container_name: zabbix-example.com-app
+      #mem_limit: 512m
+      ports:
+        - 8081:80
       links:
         - zabbix-example-com-db
         - zabbix-example-com-server
-      mem_limit: 512m
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.zabbix-example.com.rule=Host(`zabbix.example.com`)
+        - traefik.http.services.zabbix-example.com.loadbalancer.server.port=80
+        - traefik.http.routers.zabbix-example.com.middlewares=error-pages-middleware@docker
       environment:
-        - VIRTUAL_HOST=zabbix.example.com
-        - VIRTUAL_NETWORK=nginx-proxy
-        - VIRTUAL_PORT=80
-        - LETSENCRYPT_HOST=zabbix.example.com
-        - LETSENCRYPT_EMAIL=techsupport@example.com
-
-        - ZABBIX_HOSTNAME=zabbix-example-com-app
-        - ZABBIX_SERVER_ACTIVE=zabbix-example-com-server
+        - TIMEZONE=America/Vancouver
+        - ZABBIX_MODE=WEB
+        - ZABBIX_HOSTNAME=zabbix-example.com-app
+        - ZABBIX_SERVER_HOST=zabbix-example-com-server
         - ZABBIX_SERVER_PORT=10051
         - ZABBIX_SERVER_NAME=zabbix.example.com
-     
+
         - PHP_TIMEOUT=600
-        - TIMEZONE=America/Vancouver
+        - PHP_MEMORY_LIMIT=512M
 
         - DB_HOST=zabbix-example-com-db
-        - DB_TYPE=POSTGRESQL
         - DB_PORT=5432
         - DB_USER=zabbix
-        - DB_PASS=securepassword
+        - DB_PASS=password
         - DB_NAME=zabbix
         - DB_SCHEMA=public
       networks:
-        proxy-tier: 
-        zbx_net:
-          aliases:
-            - zabbix-web-nginx-pgsql
-            - zabbix-web-nginx-alpine-pgsql
-            - zabbix-web-nginx-pgsql-alpine
-
+        - proxy
+        - services
+      
     zabbix-example-com-db:
+      image: tiredofit/postgres:latest
       container_name: zabbix-example-com-db
-      image: tiredofit/postgres:10-latest
+      user: root
+      volumes:
+        - /var/local/db/zabbix.example.com:/var/lib/postgresql/data
       environment:
-        - DB_SERVER_HOST=zabbix-example-com-db
-        - DB_SERVER_PORT=5432
+        - TIMEZONE=America/Vancouver
         - POSTGRES_USER=zabbix
-        - POSTGRES_PASSWORD=securepassword
+        - POSTGRES_PASSWORD=password
         - POSTGRES_DB=zabbix
-        - ZBX_DBSCHEMA=public
         - ZABBIX_HOSTNAME=zabbix-example-com-db
         - ZABBIX_SERVER=172.16.0.0/12
         - ZABBIX_SERVER_ACTIVE=zabbix-example-com-server
-
-      volumes:
-        - /var/local/db/zabbix.example.com:/var/lib/postgresql/data
-      user: root
       networks:
-        zbx_net:
+        services:
           aliases:
-            - postgres-server
-            - pgsql-server
-            - pgsql-database
+            - zabbix-db
+      restart: always
 
     zabbix-example-com-db-backup:
+      image: tiredofit/db-backup
       container_name: zabbix-example-com-db-backup
-      image: tiredofit/db-backup:latest
       links:
         - zabbix-example-com-db
       volumes:
         - /mnt/data/data/zabbix.example.com/dbbackup:/backup
       environment:
+        - TIMEZONE=America/Vancouver
         - ZABBIX_HOSTNAME=zabbix-example-com-db-backup
         - ZABBIX_SERVER=172.16.0.0/12
         - ZABBIX_SERVER_ACTIVE=zabbix-example-com-server
@@ -164,25 +110,16 @@ services:
         - DB_TYPE=postgres
         - DB_NAME=zabbix
         - DB_USER=zabbix
-        - DB_PASS=securepassword
+        - DB_PASS=password
         - DB_DUMP_FREQ=1440
         - DB_DUMP_BEGIN=0130
         - DB_CLEANUP_TIME=8640
-      networks:
-        - zbx_net
+      networks:        
+        - services
       restart: always
 
 networks:
-  proxy-tier:
-    external:
-      name: nginx-proxy
-  zbx_net:
-    driver: bridge
-    driver_opts:
-      com.docker.network.enable_ipv6: "false"
-    ipam:
-      driver: default
-      config:
-      - subnet: 172.16.238.0/24
-        gateway: 172.16.238.1
-
+  proxy:
+    external: true
+  services:
+    external: true

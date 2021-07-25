@@ -1,0 +1,212 @@
+#!/usr/bin/with-contenv bash
+
+configure_zabbix_proxy() {
+    if [ "${ZABBIX_PROXY_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_PROXY_SETUP_TYPE}" = "auto" ] ; then
+        print_info "Configuring Zabbix Proxy"
+        cat <<EOF > "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}"
+# Custom Generated Zabbix Proxy configuration. If you want to use your own config set 'ZABBIX_PROXY_SETUP_TYPE=MANUAL'
+# Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
+
+AllowRoot=${ZABBIX_PROXY_ALLOW_ROOT}
+CacheSize=${ZABBIX_PROXY_CACHE_SIZE}
+ConfigFrequency=${ZABBIX_PROXY_FREQUENCY_CONFIG}
+DataSenderFrequency=${ZABBIX_PROXY_FREQUENCY_DATASENDER}
+DebugLevel=${ZABBIX_PROXY_DEBUG_LEVEL}
+EnableRemoteCommands=${ZABBIX_PROXY_REMOTECOMMANDS}
+HeartbeatFrequency=${ZABBIX_PROXY_FREQUENCY_HEARTBEAT}
+HistoryCacheSize=${ZABBIX_PROXY_CACHE_HISTORY_SIZE}
+HistoryIndexCacheSize=${ZABBIX_PROXY_CACHE_HISTORY_INDEX_SIZE}
+Hostname=${ZABBIX_PROXY_HOSTNAME}
+HousekeepingFrequency=${ZABBIX_PROXY_FREQUENCY_HOUSEKEEPING}
+ListenPort=${ZABBIX_PROXY_LISTEN_PORT}
+LogFile=${ZABBIX_PROXY_LOG_PATH}/${ZABBIX_PROXY_LOG_FILE}
+LogFileSize=${ZABBIX_PROXY_LOGFILESIZE}
+LogRemoteCommands=${ZABBIX_PROXY_REMOTECOMMANDS_LOG}
+LogType=${ZABBIX_PROXY_LOG_TYPE,,}
+ProxyLocalBuffer=${ZABBIX_PROXY_BUFFER_LOCAL}
+ProxyMode=${ZABBIX_PROXY_MODE}
+ProxyOfflineBuffer=${ZABBIX_PROXY_BUFFER_OFFLINE}
+Server=${ZABBIX_PROXY_SERVER}
+ServerPort=${ZABBIX_PROXY_SERVER_PORT}
+StartDBSyncers=${ZABBIX_PROXY_START_DB_SYNCERS}
+StartDiscoverers=${ZABBIX_PROXY_START_DISCOVERERS}
+StartHTTPPollers=${ZABBIX_PROXY_START_POLLERS_HTTP}
+StartHistoryPollers=${ZABBIX_PROXY_START_POLLERS_HISTORY}
+StartIPMIPollers=${ZABBIX_PROXY_START_POLLERS_IPMI}
+StartJavaPollers=${ZABBIX_PROXY_START_POLLERS_JAVA}
+StartPingers=${ZABBIX_PROXY_START_PINGERS}
+StartPollers=${ZABBIX_PROXY_START_POLLERS}
+StartPollersUnreachable=${ZABBIX_PROXY_START_POLLERS_UNREACHABLE}
+StartPreprocessors=${ZABBIX_PROXY_START_PREPROCESSORS}
+StartTrappers=${ZABBIX_PROXY_START_TRAPPERS}
+Timeout=${ZABBIX_PROXY_TIMEOUT}
+TrapperTimeout=${ZABBIX_PROXY_TIMEOUT_TRAPPER}
+UnavailableDelay=${ZABBIX_PROXY_FREQUENCY_UNAVAILABLE_DELAY}
+UnreachableDelay=${ZABBIX_PROXY_FREQUENCY_UNREACHABLE_DELAY}
+UnreachablePeriod=${ZABBIX_PROXY_FREQUENCY_UNREACHABLE}
+User=${ZABBIX_USER}
+
+DBName=/var/lib/zabbix/zabbix_proxy_db
+ExternalScripts=/usr/lib/zabbix/externalscripts
+FpingLocation=/usr/sbin/fping
+Fping6Location=/usr/sbin/fping6
+SSHKeyLocation=/var/lib/zabbix/ssh_keys
+SSLCertLocation=/var/lib/zabbix/ssl/certs/
+SSLKeyLocation=/var/lib/zabbix/ssl/keys/
+SSLCALocation=/var/lib/zabbix/ssl/ssl_ca/
+LoadModulePath=/var/lib/zabbix/modules/
+
+Include=${ZABBIX_PROXY_CONFIG_PATH}/${ZABBIX_PROXY_CONFIG_FILE}.d/*.conf
+EOF
+
+    fi
+
+    mkdir -p "${ZABBIX_PROXY_LOG_PATH}"
+    chown -R "${ZABBIX_USER}" "${ZABBIX_PROXY_LOG_PATH}"
+    chown -R "${ZABBIX_USER}" "${ZABBIX_PROXY_CONFIG_PATH}"
+    mkdir -p "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}".d/
+    chown -R "${ZABBIX_USER}" "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}".d/
+}
+
+configure_zabbix_server() {
+    if [ "${ZABBIX_SERVER_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_SERVER_SETUP_TYPE}" = "auto" ] ; then
+    print_info "Configuring Zabbix Server"
+    cat <<EOF > "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}"
+# Custom Generated Zabbix Server configuration. If you want to use your own config set 'ZABBIX_SERVER_SETUP_TYPE=MANUAL'
+# Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
+
+AllowRoot=${ZABBIX_SERVER_ALLOW_ROOT}
+CacheSize=${ZABBIX_SERVER_CACHE_SIZE}
+CacheUpdateFrequency=${ZABBIX_SERVER_CACHE_UPDATE_FREQUENCY}
+DBHost=${DB_HOST}
+DBName=${DB_NAME}
+DBPassword=${DB_PASS}
+DBPort=${DB_PORT}
+DBSchema=${DB_SCHEMA}
+DBUser=${DB_USER}
+DebugLevel=${ZABBIX_SERVER_DEBUG_LEVEL}
+HistoryCacheSize=${ZABBIX_SERVER_CACHE_HISTORY_SIZE}
+HistoryIndexCacheSize=${ZABBIX_SERVER_CACHE_HISTORY_INDEX_SIZE}
+HousekeepingFrequency=${ZABBIX_SERVER_FREQUENCY_HOUSEKEEPING}
+ListenPort=${ZABBIX_SERVER_LISTEN_PORT}
+LogFile=${ZABBIX_SERVER_LOG_PATH}/${ZABBIX_SERVER_LOG_FILE}
+LogFileSize=${ZABBIX_SERVER_LOGFILESIZE}
+LogType=${ZABBIX_SERVER_LOG_TYPE,,}
+MaxHousekeeperDelete=${ZABBIX_SERVER_MAX_HOUSEKEEPING_DELETE}
+ProxyConfigFrequency=${ZABBIX_SERVER_FREQUENCY_PROXY_CONFIG}
+ProxyDataFrequency=${ZABBIX_SERVER_FREQUENCY_PROXY_DATA}
+StartAlerters=${ZABBIX_SERVER_START_ALERTERS}
+StartDBSyncers=${ZABBIX_SERVER_START_DB_SYNCERS}
+StartDiscoverers=${ZABBIX_SERVER_START_DISCOVERERS}
+StartEscalators=${ZABBIX_SERVER_START_ESCALATORS}
+StartHTTPPollers=${ZABBIX_SERVER_START_POLLERS_HTTP}
+StartHistoryPollers=${ZABBIX_SERVER_START_POLLERS_HISTORY}
+StartIPMIPollers=${ZABBIX_SERVER_START_POLLERS_IPMI}
+StartJavaPollers=${ZABBIX_SERVER_START_POLLERS_JAVA}
+StartLLDProcessors=${ZABBIX_SERVER_START_LLD_PROCESSORS}
+StartPingers=${ZABBIX_SERVER_START_PINGERS}
+StartPollers=${ZABBIX_SERVER_START_POLLERS}
+StartPollersUnreachable=${ZABBIX_SERVER_START_POLLERS_UNREACHABLE}
+StartPreprocessors=${ZABBIX_SERVER_START_PREPROCESSORS}
+StartProxyPollers=${ZABBIX_SERVER_START_PROXY_POLLERS}
+StartSNMPTrapper=${ZABBIX_SERVER_START_SNMPTRAPPER}
+StartTimers=${ZABBIX_SERVER_START_TIMERS}
+StartTrappers=${ZABBIX_SERVER_START_TRAPPERS}
+Timeout=${ZABBIX_SERVER_TIMEOUT}
+TrapperTimeout=${ZABBIX_SERVER_TIMEOUT_TRAPPER}
+TrendFunctionCacheSize=${ZABBIX_SERVER_CACHE_TREND_FUNCTION_SIZE}
+UnavailableDelay=${ZABBIX_SERVER_FREQUENCY_UNAVAILABLE_DELAY}
+UnreachableDelay=${ZABBIX_SERVER_FREQUENCY_UNREACHABLE_DELAY}
+UnreachablePeriod=${ZABBIX_SERVER_FREQUENCY_UNREACHABLE}
+ValueCacheSize=${ZABBIX_SERVER_CACHE_VALUE_SIZE}
+
+ExternalScripts=/usr/lib/zabbix/externalscripts
+FpingLocation=/usr/sbin/fping
+Fping6Location=/usr/sbin/fping6
+SSHKeyLocation=/var/lib/zabbix/ssh_keys
+SSLCertLocation=/var/lib/zabbix/ssl/certs/
+SSLKeyLocation=/var/lib/zabbix/ssl/keys/
+SSLCALocation=/var/lib/zabbix/ssl/ssl_ca/
+LoadModulePath=/var/lib/zabbix/modules/
+
+Include=${ZABBIX_SERVER_CONFIG_PATH}/${ZABBIX_SERVER_CONFIG_FILE}.d/*.conf
+EOF
+    fi
+
+    mkdir -p "${ZABBIX_SERVER_LOG_PATH}"
+    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_LOG_PATH}"
+    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"
+    mkdir -p "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
+    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
+}
+
+configure_zabbix_web_frontend() {
+    if var_true "$DB_UPGRADED" ; then
+        db_ieee754="\$DB['DOUBLE_IEEE754'] = 'true';"
+    else
+        db_ieee754="\$DB['DOUBLE_IEEE754'] = 'false';"
+    fi
+
+    cat <<EOF > "${NGINX_WEBROOT}"/conf/zabbix.conf.php
+<?php
+// Zabbix GUI configuration file.
+global \$DB;
+
+\$DB['TYPE']        = 'POSTGRESQL';
+\$DB['SERVER']      = '${DB_HOST}';
+\$DB['PORT']        = '${DB_PORT}';
+\$DB['DATABASE']    = '${DB_NAME}';
+\$DB['USER']        = '${DB_USER}';
+\$DB['PASSWORD']    = '${DB_PASS}';
+\$DB['SCHEMA']      = '${DB_SCHEMA}';
+${db_ieee754}
+\$ZBX_SERVER   		= '${ZABBIX_SERVER_HOST}';
+\$ZBX_SERVER_PORT 	= '${ZABBIX_SERVER_PORT}';
+\$ZBX_SERVER_NAME 	= '${ZABBIX_SERVER_NAME}';
+
+\$IMAGE_FORMAT_DEFAULT	= IMAGE_FORMAT_PNG;
+EOF
+}
+
+configure_alert_scripts() {
+    if dir_notempty "/assets/alertscripts" ; then
+        cp -R /assets/alertscripts/* /usr/lib/zabbix/alertscripts
+    fi
+
+    chown -R "${ZABBIX_USER}" /usr/lib/zabbix/alertscripts
+    chmod -R 0755 /usr/lib/zabbix/alertscripts
+}
+
+configure_external_scripts() {
+    if dir_notempty "/assets/externalscripts" ; then
+        cp -R /assets/externalscripts/* /usr/lib/zabbix/externalscripts
+    fi
+
+    chown -R "${ZABBIX_USER}" /usr/lib/zabbix/externalscripts
+    chmod -R 0755 /usr/lib/zabbix/externalscripts
+}
+
+db_bootstrap() {
+    if [ -n "${DB_PASS}" ]; then
+        export PGPASSWORD="${DB_PASS}"
+    fi
+
+    dbversion_table=$(psql -A -q -t -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -c "SELECT 1 FROM pg_catalog.pg_class c JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE  n.nspname = '${DB_SCHEMA}' AND c.relname = 'dbversion'" "${DB_NAME}" 2>/dev/null)
+
+
+    if [ -n "${dbversion_table}" ]; then
+        print_debug "Table '${DB_NAME}.dbversion' already exists."
+        db_version=$(psql -A -q -t -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" -c "SELECT mandatory FROM ${DB_SCHEMA}.dbversion" "${DB_NAME}")
+    fi
+
+    if [ -z "${db_version}" ]; then
+        print_warn "Creating '${DB_NAME}' schema in PostgreSQL"
+        cat /usr/share/doc/zabbix-server/sql/postgresql/schema.sql | psql -q -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" "${DB_NAME}" 1>/dev/null
+        print_debug "Fill the schema with initial data"
+        cat /usr/share/doc/zabbix-server/sql/postgresql/images.sql | psql -q -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" "${DB_NAME}" 1>/dev/null
+        cat /usr/share/doc/zabbix-server/sql/postgresql/data.sql | psql -q -h "${DB_HOST}" -p "${DB_PORT}" -U "${DB_USER}" "${DB_NAME}" 1>/dev/null
+    fi
+
+    unset PGPASSWORD
+}
+
