@@ -13,6 +13,7 @@ services:
         - ./data/var/lib/zabbix/enc:/var/lib/zabbix/enc
         - ./data/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys
         - ./data/var/lib/zabbix/mibs:/var/lib/zabbix/mibs
+        - ./logs/server:/var/log/zabbix/server
       links:
         - zabbix-example-com-db
       ulimits:
@@ -38,9 +39,9 @@ services:
             - zabbix-server
       restart: always
 
-    zabbix-example.com-app:
+    zabbix-example-com-app:
       image: tiredofit/zabbix:latest
-      container_name: zabbix-example.com-app
+      container_name: zabbix-example-com-app
       #mem_limit: 512m
       ports:
         - 8081:80
@@ -51,7 +52,8 @@ services:
         - traefik.enable=true
         - traefik.http.routers.zabbix-example.com.rule=Host(`zabbix.example.com`)
         - traefik.http.services.zabbix-example.com.loadbalancer.server.port=80
-        - traefik.http.routers.zabbix-example.com.middlewares=error-pages-middleware@docker
+      volumes:
+        - ./logs/nginx:/www/logs/nginx
       environment:
         - TIMEZONE=America/Vancouver
         - ZABBIX_MODE=WEB
@@ -98,7 +100,7 @@ services:
       container_name: zabbix-example-com-proxy
       mem_limit: 256m
       volumes:
-        - ./logs/proxy:/var/log/zabbix/proxy/
+        - ./logs/proxy:/var/log/zabbix/proxy
       environment:
         - ZABBIX_MODE=PROXY
         - ZABBIX_HOSTNAME=zabbix-example-com-proxy
