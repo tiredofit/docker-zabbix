@@ -32,7 +32,6 @@ services:
         - DB_PASS=password
         - DB_USER=zabbix
         - DB_SCHEMA=public
-      user: root
       networks:
         services:
           aliases:
@@ -92,6 +91,25 @@ services:
         services:
           aliases:
             - zabbix-db
+      restart: always
+
+    zabbix-example-com-proxy:
+      image: tiredofit/zabbix:latest
+      container_name: zabbix-example-com-proxy
+      mem_limit: 256m
+      volumes:
+        - ./logs/proxy:/var/log/zabbix/proxy/
+      environment:
+        - ZABBIX_MODE=PROXY
+        - ZABBIX_HOSTNAME=zabbix-example-com-proxy
+        - ZABBIX_PROXY_HOSTNAME=zabbix-proxy.example.com
+        - ZABBIX_PROXY_SERVER=zabbix.example.com
+        - ZABBIX_PROXY_SERVER_PORT=10051
+        - ZABBIX_PROXY_LISTEN_PORT=10051
+      networks:
+        services:
+          aliases:
+            - dev-zabbix-proxy
       restart: always
 
     zabbix-example-com-db-backup:
