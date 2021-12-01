@@ -1,3 +1,9 @@
+## 3.0.4 2021-12-01 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add SSO_SETTINGS variable
+
+
 ## 3.0.3 2021-11-29 <dave at tiredofit dot ca>
 
    ### Added

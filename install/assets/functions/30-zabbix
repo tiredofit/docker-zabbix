@@ -147,6 +147,9 @@ configure_zabbix_web_frontend() {
         db_ieee754="\$DB['DOUBLE_IEEE754'] = 'false';"
     fi
 
+    if [ -n "${SSO_SETTINGS} "] ; then
+        sso_settings="\$SSO['SETTINGS'] = [ ${SSO_SETTINGS} ];"
+    fi
     cat <<EOF > "${NGINX_WEBROOT}"/conf/zabbix.conf.php
 <?php
 // Zabbix GUI configuration file.
@@ -165,6 +168,7 @@ ${db_ieee754}
 \$ZBX_SERVER_NAME 	= '${ZABBIX_SERVER_NAME}';
 
 \$IMAGE_FORMAT_DEFAULT	= IMAGE_FORMAT_PNG;
+${sso_settings}
 EOF
 }
 
