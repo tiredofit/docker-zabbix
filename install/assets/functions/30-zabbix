@@ -3,6 +3,31 @@
 configure_zabbix_proxy() {
     if [ "${ZABBIX_PROXY_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_PROXY_SETUP_TYPE}" = "auto" ] ; then
         print_info "Configuring Zabbix Proxy"
+        if [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_ID}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] ; then
+            print_debug "Zabbix Proxy - Using PSK Encryption"
+            if [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] && [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] ; then
+                print_error "You've selected Zabbix Proxy PSK Encryption but haven't supplied a file or a Key!"
+                exit 1
+            fi
+
+            if [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] && [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] ; then
+                print_debug "Zabbix Proxy - Only have PSK via ENV Var (Automated creation of file)"
+                # libreoffice/openssl rand -hex 32 = 256bit
+                mkdir -p ${ZABBIX_CERT_PATH}
+                ZABBIX_PROXY_ENCRYPT_PSK_FILE="zabbix_proxy.psk"
+                echo "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" > "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_ENCRYPT_PSK_FILE}"
+            fi
+
+            chmod -f 0600 "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_ENCRYPT_PSK_FILE}"
+            chown -f -R "${ZABBIX_USER}" "${ZABBIX_CERT_PATH}"
+            tls_psk=$(cat<<EOF
+TLSConnect=psk
+TLSPSKIdentity=${ZABBIX_PROXY_ENCRYPT_PSK_ID}
+TLSPSKFile=${ZABBIX_CERT_PATH}/${ZABBIX_PROXY_ENCRYPT_PSK_FILE}
+EOF
+            )
+        fi
+
         cat <<EOF > "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}"
 # Custom Generated Zabbix Proxy configuration. If you want to use your own config set 'ZABBIX_PROXY_SETUP_TYPE=MANUAL'
 # Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
@@ -55,6 +80,8 @@ SSLCertLocation=/var/lib/zabbix/ssl/certs/
 SSLKeyLocation=/var/lib/zabbix/ssl/keys/
 SSLCALocation=/var/lib/zabbix/ssl/ssl_ca/
 LoadModulePath=/var/lib/zabbix/modules/
+
+${tls_psk}
 
 Include=${ZABBIX_PROXY_CONFIG_PATH}/${ZABBIX_PROXY_CONFIG_FILE}.d/*.conf
 EOF
