@@ -88,6 +88,15 @@ EOF
 
     fi
 
+    if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ]; then
+        source /assets/defaults/03-monitoring
+        cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit_zabbix-proxy.conf
+# Zabbix Proxy Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
+# Autoregister=zabbixproxy
+EOF
+    fi
+
     mkdir -p "${ZABBIX_PROXY_LOG_PATH}"
     chown -R "${ZABBIX_USER}" "${ZABBIX_PROXY_LOG_PATH}"
     chown -R "${ZABBIX_USER}" "${ZABBIX_PROXY_CONFIG_PATH}"
@@ -97,8 +106,8 @@ EOF
 
 configure_zabbix_server() {
     if [ "${ZABBIX_SERVER_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_SERVER_SETUP_TYPE}" = "auto" ] ; then
-    print_info "Configuring Zabbix Server"
-    cat <<EOF > "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}"
+        print_info "Configuring Zabbix Server"
+        cat <<EOF > "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}"
 # Custom Generated Zabbix Server configuration. If you want to use your own config set 'ZABBIX_SERVER_SETUP_TYPE=MANUAL'
 # Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
 
@@ -160,11 +169,20 @@ Include=${ZABBIX_SERVER_CONFIG_PATH}/${ZABBIX_SERVER_CONFIG_FILE}.d/*.conf
 EOF
     fi
 
-    mkdir -p "${ZABBIX_SERVER_LOG_PATH}"
-    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_LOG_PATH}"
-    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"
-    mkdir -p "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
-    chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
+        if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ]; then
+            source /assets/defaults/03-monitoring
+            cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit_zabbix-server.conf
+# Zabbix Server Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
+# Autoregister=zabbixserver
+EOF
+        fi
+
+        mkdir -p "${ZABBIX_SERVER_LOG_PATH}"
+        chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_LOG_PATH}"
+        chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"
+        mkdir -p "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
+        chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
 }
 
 configure_zabbix_web_frontend() {
