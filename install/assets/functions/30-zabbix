@@ -95,6 +95,9 @@ EOF
 # Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
 # Autoregister=zabbixproxy
 EOF
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php-opcache.conf
     fi
 
     mkdir -p "${ZABBIX_PROXY_LOG_PATH}"
@@ -176,6 +179,10 @@ EOF
 # Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
 # Autoregister=zabbixserver
 EOF
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php-opcache.conf
+
         fi
 
         mkdir -p "${ZABBIX_SERVER_LOG_PATH}"

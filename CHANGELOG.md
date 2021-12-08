@@ -1,3 +1,9 @@
+## 3.0.6 2021-12-07 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Don't Auto register Nginx or PHP templates if Server or Proxy
+
+
 ## 3.0.5 2021-12-07 <dave at tiredofit dot ca>
 
    ### Added
