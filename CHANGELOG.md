@@ -1,3 +1,9 @@
+## 3.0.7 2021-12-10 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Additional fix for autoregister templates for proxy and server mode
+
+
 ## 3.0.6 2021-12-07 <dave at tiredofit dot ca>
 
    ### Changed
