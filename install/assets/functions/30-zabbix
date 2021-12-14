@@ -97,7 +97,7 @@ EOF
 EOF
         rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
         rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
-        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php-opcache.conf
+        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php_opcache.conf
     fi
 
     mkdir -p "${ZABBIX_PROXY_LOG_PATH}"
