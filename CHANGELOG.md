@@ -1,3 +1,9 @@
+## 3.0.9 2021-12-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Fix for broken brace
+
+
 ## 3.0.8 2021-12-22 <dave at tiredofit dot ca>
 
    ### Changed
