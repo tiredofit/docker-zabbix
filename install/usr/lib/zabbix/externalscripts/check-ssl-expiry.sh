@@ -7,7 +7,7 @@ SERVER=$1
 PORT=${2:-443}
 TIMEOUT=10
 
-cert_data="$(/usr/bin/timeout -t $TIMEOUT /usr/bin/openssl s_client -host $SERVER -port $PORT -servername $SERVER -showcerts < /dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERT/p' | openssl x509 -enddate -noout 2>/dev/null | sed -e 's/^.*\=//')"
+cert_data="$(/usr/bin/timeout $TIMEOUT /usr/bin/openssl s_client -host $SERVER -port $PORT -servername $SERVER -showcerts < /dev/null 2>/dev/null | sed -n '/BEGIN CERTIFICATE/,/END CERT/p' | openssl x509 -enddate -noout 2>/dev/null | sed -e 's/^.*\=//')"
 
 if [ -n "$cert_data" ] ; then
 	end_date_seconds=$(date "+%s" --date "${cert_data// GMT/}")

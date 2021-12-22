@@ -1,3 +1,9 @@
+## 3.0.8 2021-12-22 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Adjust check-ssl-expiry.sh bash script
+
+
 ## 3.0.7 2021-12-10 <dave at tiredofit dot ca>
 
    ### Changed
