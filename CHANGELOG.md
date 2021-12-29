@@ -1,3 +1,9 @@
+## 3.1.0 2021-12-28 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add Zabbix Web service configuration
+
+
 ## 3.0.10 2021-12-27 <dave at tiredofit dot ca>
 
    ### Added

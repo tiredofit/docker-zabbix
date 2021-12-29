@@ -14,6 +14,7 @@ case "${ZABBIX_MODE}" in
         service_stop 11-nginx-config-reload
         service_stop 20-php-fpm
         service_stop 30-zabbix-server
+        service_stop 30-zabbix-webservice
         rm -rf /etc/logrotate.d/{nginx,php-fpm}
         configure_zabbix_proxy
         if [ "${ZABBIX_PROXY_LOG_TYPE}" = "FILE" ] || [ "${ZABBIX_PROXY_LOG_TYPE}" = "file" ] ; then
@@ -26,6 +27,7 @@ case "${ZABBIX_MODE}" in
         service_stop 11-nginx-config-reload
         service_stop 20-php-fpm
         service_stop 30-zabbix-proxy
+        service_stop 30-zabbix-webservice
         rm -rf /etc/logrotate.d/{nginx,php-fpm}
         source /assets/defaults/zabbix-server
         sanity_db
@@ -43,8 +45,24 @@ case "${ZABBIX_MODE}" in
         db_ready postgres
         service_stop 30-zabbix-proxy
         service_stop 30-zabbix-server
+        service_stop 30-zabbix-webservice
         configure_zabbix_web_frontend
     ;;
+    "WEBSERVICE" | "webservice" )
+        print_debug "Zabbix Container Mode; Webservice"
+        service_stop 10-nginx
+        service_stop 11-nginx-config-reload
+        service_stop 20-php-fpm
+        service_stop 30-zabbix-proxy
+        service_stop 30-zabbix-server
+        rm -rf /etc/logrotate.d/{nginx,php-fpm}
+        source /assets/defaults/zabbix-webservice
+        configure_zabbix_webservice
+        if [ "${ZABBIX_WEBSERVICE_LOG_TYPE}" = "FILE" ] || [ "${ZABBIX_WEBSERVICE_LOG_TYPE}" = "file" ] ; then
+            create_logrotate zabbix_webservice ${ZABBIX_WEBSERVICE_LOG_PATH}/${ZABBIX_WEBSERVICE_LOG_FILE} ${ZABBIX_USER} ${ZABBIX_USER}
+        fi
+    ;;
+
     *)
         print_error "Unknown ZABBIX_MODE - exiting."
         exit 1

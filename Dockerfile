@@ -22,6 +22,7 @@ RUN set -x && \
                 curl-dev \
                 g++ \
                 git \
+                go \
                 libevent-dev \
                 libssh-dev \
                 libxml2-dev \
@@ -35,6 +36,7 @@ RUN set -x && \
                 unixodbc-dev \
                 && \
     apk add -t .zabbix-run-deps \
+                chromium \
                 fping \
                 iputils \
                 iputils \
@@ -88,6 +90,7 @@ RUN set -x && \
             --sysconfdir=/etc/zabbix \
             --enable-agent \
             --enable-server \
+            --enable-webservice \
             --with-postgresql \
             --with-ldap \
             --with-libcurl \
@@ -124,6 +127,7 @@ RUN set -x && \
     cp src/zabbix_get/zabbix_get /usr/bin/zabbix_get && \
     cp src/zabbix_sender/zabbix_sender /usr/bin/zabbix_sender && \
     cp src/zabbix_server/zabbix_server /usr/sbin/zabbix_server && \
+    cp -R /usr/src/zabbix/src/go/bin/zabbix_web_service /usr/sbin/zabbix_web_service && \
     cp -R database/postgresql /usr/share/doc/zabbix-server/sql && \
     mv ui ${NGINX_WEBROOT} && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT} && \

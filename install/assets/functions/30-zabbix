@@ -148,6 +148,7 @@ StartPollers=${ZABBIX_SERVER_START_POLLERS}
 StartPollersUnreachable=${ZABBIX_SERVER_START_POLLERS_UNREACHABLE}
 StartPreprocessors=${ZABBIX_SERVER_START_PREPROCESSORS}
 StartProxyPollers=${ZABBIX_SERVER_START_PROXY_POLLERS}
+StartReportWriters=${ZABBIX_SERVER_START_REPORT_WRITERS}
 StartSNMPTrapper=${ZABBIX_SERVER_START_SNMPTRAPPER}
 StartTimers=${ZABBIX_SERVER_START_TIMERS}
 StartTrappers=${ZABBIX_SERVER_START_TRAPPERS}
@@ -158,6 +159,7 @@ UnavailableDelay=${ZABBIX_SERVER_FREQUENCY_UNAVAILABLE_DELAY}
 UnreachableDelay=${ZABBIX_SERVER_FREQUENCY_UNREACHABLE_DELAY}
 UnreachablePeriod=${ZABBIX_SERVER_FREQUENCY_UNREACHABLE}
 ValueCacheSize=${ZABBIX_SERVER_CACHE_VALUE_SIZE}
+WebServiceURL=${ZABBIX_SERVER_WEBSERVICE_URL}
 
 ExternalScripts=/usr/lib/zabbix/externalscripts
 FpingLocation=/usr/sbin/fping
@@ -179,10 +181,9 @@ EOF
 # Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
 # Autoregister=zabbixserver
 EOF
-        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
-        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
-        rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php_opcache.conf
-
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php_opcache.conf
         fi
 
         mkdir -p "${ZABBIX_SERVER_LOG_PATH}"
@@ -190,6 +191,43 @@ EOF
         chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"
         mkdir -p "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
         chown -R "${ZABBIX_USER}" "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}".d/
+}
+
+configure_zabbix_webservice() {
+    if [ "${ZABBIX_WEBSERVICE_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_WEBSERVICE_SETUP_TYPE}" = "auto" ] ; then
+        print_info "Configuring Zabbix Webservice"
+        cat <<EOF > "${ZABBIX_WEBSERVICE_CONFIG_PATH}"/"${ZABBIX_WEBSERVICE_CONFIG_FILE}"
+# Custom Generated Zabbix Webservice configuration. If you want to use your own config set 'ZABBIX_WEBSERVICE_SETUP_TYPE=MANUAL'
+# Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
+
+AllowedIP=${ZABBIX_WEBSERVICE_ALLOWED_IPS}
+DebugLevel=${ZABBIX_WEBSERVICE_DEBUG_LEVEL}
+ListenPort=${ZABBIX_WEBSERVICE_LISTEN_PORT}
+LogFile=${ZABBIX_WEBSERVICE_LOG_PATH}/${ZABBIX_WEBSERVICE_LOG_FILE}
+LogFileSize=${ZABBIX_WEBSERVICE_LOGFILESIZE}
+LogType=${ZABBIX_WEBSERVICE_LOG_TYPE,,}
+Timeout=${ZABBIX_WEBSERVICE_TIMEOUT}
+EOF
+
+        if var_true "${CONTAINER_ENABLE_MONITORING}" && [ "${CONTAINER_MONITORING_BACKEND,,}" = "zabbix" ]; then
+            source /assets/defaults/03-monitoring
+            cat <<EOF > "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit_zabbix-webservice.conf
+# Zabbix Webservice Configuration - Automatically Generated
+# Find Companion Zabbix Server Templates at https://github.com/tiredofit/docker-zabbix
+# Autoregister=zabbixwebservice
+EOF
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/nginx.conf
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/php-fpm.conf
+            rm -rf "${ZABBIX_CONFIG_PATH}"/"${ZABBIX_CONFIG_FILE}.d"/tiredofit-php_opcache.conf
+
+        fi
+
+        mkdir -p "${ZABBIX_WEBSERVICE_LOG_PATH}"
+        chown -R "${ZABBIX_USER}" "${ZABBIX_WEBSERVICE_LOG_PATH}"
+        chown -R "${ZABBIX_USER}" "${ZABBIX_WEBSERVICE_CONFIG_PATH}"
+        mkdir -p "${ZABBIX_WEBSERVICE_CONFIG_PATH}"/"${ZABBIX_WEBSERVICE_CONFIG_FILE}".d/
+        chown -R "${ZABBIX_USER}" "${ZABBIX_WEBSERVICE_CONFIG_PATH}"/"${ZABBIX_WEBSERVICE_CONFIG_FILE}".d/
+    fi
 }
 
 configure_zabbix_web_frontend() {
