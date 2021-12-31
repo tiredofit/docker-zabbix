@@ -1,3 +1,9 @@
+## 3.1.1 2021-12-31 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Tweak SSL Certificate expiry script
+
+
 ## 3.1.0 2021-12-28 <dave at tiredofit dot ca>
 
    ### Added
