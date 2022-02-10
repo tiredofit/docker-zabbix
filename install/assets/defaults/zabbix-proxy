@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 ZABBIX_PROXY_ALLOW_ROOT=${ZABBIX_PROXY_ALLOW_ROOT:-"1"}
 ZABBIX_PROXY_BUFFER_LOCAL=${ZABBIX_PROXY_BUFFER_LOCAL:-"0"}

@@ -2,13 +2,15 @@ FROM docker.io/tiredofit/nginx-php-fpm:8.0
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults
-ENV ZABBIX_VERSION=5.4.9 \
+ENV ZABBIX_VERSION=5.4.10 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
     PHP_ENABLE_XMLWRITER=TRUE \
     NGINX_WEBROOT=/www/zabbix \
-    CONTAINER_ENABLE_MESSAGING=FALSE
+    CONTAINER_ENABLE_MESSAGING=FALSE \
+    IMAGE_NAME="tiredofit/zabbix" \
+    IMAGE_REPO_URL="https://github.com/tiredofit/docker-zabbix/"
 
 ### Add Build Dependencies
 RUN set -x && \

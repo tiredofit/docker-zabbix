@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 configure_zabbix_proxy() {
     if [ "${ZABBIX_PROXY_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_PROXY_SETUP_TYPE}" = "auto" ] ; then
