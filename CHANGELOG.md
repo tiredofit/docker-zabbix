@@ -1,3 +1,9 @@
+## 3.1.4 2022-02-15 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add ability for Zabbix 6.0 server to run on unsupported DBs
+
+
 ## 3.1.3 2022-02-14 <dave at tiredofit dot ca>
 
    ### Added
