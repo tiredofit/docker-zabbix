@@ -114,6 +114,7 @@ configure_zabbix_server() {
 # Custom Generated Zabbix Server configuration. If you want to use your own config set 'ZABBIX_SERVER_SETUP_TYPE=MANUAL'
 # Generated on $(TZ=${TIMEZONE} date +'%Y-%m-%d %H:%M:%S %Z')
 
+AllowUnsupportedDBVersions=${ZABBIX_SERVER_ALLOW_UNSUPPORTED_DB}
 AllowRoot=${ZABBIX_SERVER_ALLOW_ROOT}
 CacheSize=${ZABBIX_SERVER_CACHE_SIZE}
 CacheUpdateFrequency=${ZABBIX_SERVER_CACHE_UPDATE_FREQUENCY}

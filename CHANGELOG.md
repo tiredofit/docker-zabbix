@@ -1,3 +1,9 @@
+## 3.1.5 2022-02-15 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Patchup for previous release
+
+
 ## 3.1.4 2022-02-15 <dave at tiredofit dot ca>
 
    ### Added
