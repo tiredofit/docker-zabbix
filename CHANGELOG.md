@@ -1,3 +1,9 @@
+## 3.1.6 2022-02-18 <dave at tiredofit dot ca>
+
+   ### Added
+      - Addd check-http-authentication.sh script for HTTP checks requiring a dynamic session/cookie
+
+
 ## 3.1.5 2022-02-15 <dave at tiredofit dot ca>
 
    ### Changed
