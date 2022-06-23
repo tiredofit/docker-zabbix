@@ -1,3 +1,9 @@
+## 3.1.13 2022-06-23 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Repush of 3.1.12
+
+
 ## 3.1.12 2022-06-23 <dave at tiredofit dot ca>
 
    ### Added
