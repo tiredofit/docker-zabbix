@@ -1,3 +1,9 @@
+## 3.1.15 2022-07-07 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Modernize Nginx configuration directives
+
+
 ## 3.1.14 2022-06-29 <dave at tiredofit dot ca>
 
    ### Added
