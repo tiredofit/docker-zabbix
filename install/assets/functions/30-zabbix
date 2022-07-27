@@ -1,7 +1,7 @@
 #!/command/with-contenv bash
 
 configure_zabbix_proxy() {
-    if [ "${ZABBIX_PROXY_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_PROXY_SETUP_TYPE}" = "auto" ] ; then
+    if [ "${ZABBIX_PROXY_SETUP_TYPE,,}" = "auto" ] ; then
         print_info "Configuring Zabbix Proxy"
         if [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_ID}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] ; then
             print_debug "Zabbix Proxy - Using PSK Encryption"
@@ -106,7 +106,7 @@ EOF
 }
 
 configure_zabbix_server() {
-    if [ "${ZABBIX_SERVER_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_SERVER_SETUP_TYPE}" = "auto" ] ; then
+    if [ "${ZABBIX_SERVER_SETUP_TYPE,,}" = "auto" ] ; then
         print_info "Configuring Zabbix Server"
         cat <<EOF > "${ZABBIX_SERVER_CONFIG_PATH}"/"${ZABBIX_SERVER_CONFIG_FILE}"
 # Custom Generated Zabbix Server configuration. If you want to use your own config set 'ZABBIX_SERVER_SETUP_TYPE=MANUAL'
@@ -193,7 +193,7 @@ EOF
 }
 
 configure_zabbix_webservice() {
-    if [ "${ZABBIX_WEBSERVICE_SETUP_TYPE}" = "AUTO" ] || [ "${ZABBIX_WEBSERVICE_SETUP_TYPE}" = "auto" ] ; then
+    if [ "${ZABBIX_WEBSERVICE_SETUP_TYPE,,}" = "auto" ] ; then
         print_info "Configuring Zabbix Webservice"
         cat <<EOF > "${ZABBIX_WEBSERVICE_CONFIG_PATH}"/"${ZABBIX_WEBSERVICE_CONFIG_FILE}"
 # Custom Generated Zabbix Webservice configuration. If you want to use your own config set 'ZABBIX_WEBSERVICE_SETUP_TYPE=MANUAL'
@@ -230,7 +230,7 @@ EOF
 }
 
 configure_zabbix_web_frontend() {
-    if var_true "$DB_UPGRADED" ; then
+    if var_true "${DB_UPGRADED}" ; then
         db_ieee754="\$DB['DOUBLE_IEEE754'] = 'true';"
     else
         db_ieee754="\$DB['DOUBLE_IEEE754'] = 'false';"
