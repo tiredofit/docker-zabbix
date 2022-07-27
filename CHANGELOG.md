@@ -1,3 +1,13 @@
+## 3.1.18 2022-07-27 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Minor case cleanup for environment variables
+      - Change the way Zabbix Proxy parses Hostnames and Ports
+
+   ### Reverted
+      - Remove Zabbix History Pollers
+
+
 ## 3.1.17 2022-07-26 <dave at tiredofit dot ca>
 
    ### Added

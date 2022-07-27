@@ -6,8 +6,8 @@ source /assets/functions/30-zabbix
 
 PROCESS_NAME="zabbix"
 
-case "${ZABBIX_MODE}" in
-    "PROXY" | "proxy" )
+case "${ZABBIX_MODE,,}" in
+    "proxy" )
         print_debug "Zabbix Container Mode; Proxy"
         source /assets/defaults/zabbix-proxy
         service_stop 10-nginx
@@ -17,11 +17,11 @@ case "${ZABBIX_MODE}" in
         service_stop 30-zabbix-webservice
         rm -rf /etc/logrotate.d/{nginx,php-fpm}
         configure_zabbix_proxy
-        if [ "${ZABBIX_PROXY_LOG_TYPE}" = "FILE" ] || [ "${ZABBIX_PROXY_LOG_TYPE}" = "file" ] ; then
+        if [ "${ZABBIX_PROXY_LOG_TYPE,,}" = "file" ] ; then
             create_logrotate zabbix_proxy ${ZABBIX_PROXY_LOG_PATH}/${ZABBIX_PROXY_LOG_FILE} ${ZABBIX_USER} ${ZABBIX_USER}
         fi
     ;;
-    "SERVER" | "server" )
+    "server" )
         print_debug "Zabbix Container Mode; Server"
         service_stop 10-nginx
         service_stop 11-nginx-config-reload
@@ -34,11 +34,11 @@ case "${ZABBIX_MODE}" in
         db_ready postgres
         db_bootstrap
         configure_zabbix_server
-        if [ "${ZABBIX_SERVER_LOG_TYPE}" = "FILE" ] || [ "${ZABBIX_SERVER_LOG_TYPE}" = "file" ] ; then
+        if [ "${ZABBIX_SERVER_LOG_TYPE,,}" = "file" ] ; then
             create_logrotate zabbix_server ${ZABBIX_SERVER_LOG_PATH}/${ZABBIX_SERVER_LOG_FILE} ${ZABBIX_USER} ${ZABBIX_USER}
         fi
     ;;
-    "WEB" | "web" | "FRONTEND" | "frontend" )
+    "web" | "frontend" )
         print_debug "Zabbix Container Mode; Web Frontend"
         check_service_initialized init 20-php-fpm
         sanity_db
@@ -48,7 +48,7 @@ case "${ZABBIX_MODE}" in
         service_stop 30-zabbix-webservice
         configure_zabbix_web_frontend
     ;;
-    "WEBSERVICE" | "webservice" )
+    "webservice" )
         print_debug "Zabbix Container Mode; Webservice"
         service_stop 10-nginx
         service_stop 11-nginx-config-reload
@@ -58,7 +58,7 @@ case "${ZABBIX_MODE}" in
         rm -rf /etc/logrotate.d/{nginx,php-fpm}
         source /assets/defaults/zabbix-webservice
         configure_zabbix_webservice
-        if [ "${ZABBIX_WEBSERVICE_LOG_TYPE}" = "FILE" ] || [ "${ZABBIX_WEBSERVICE_LOG_TYPE}" = "file" ] ; then
+        if [ "${ZABBIX_WEBSERVICE_LOG_TYPE,,}" = "file" ] ; then
             create_logrotate zabbix_webservice ${ZABBIX_WEBSERVICE_LOG_PATH}/${ZABBIX_WEBSERVICE_LOG_FILE} ${ZABBIX_USER} ${ZABBIX_USER}
         fi
     ;;
