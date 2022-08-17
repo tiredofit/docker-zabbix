@@ -9,4 +9,4 @@ check_container_initialized
 liftoff
 
 print_start "Starting Zabbix Proxy ${ZABBIX_VERSION}"
-silent s6-setuidgid ${ZABBIX_USER} zabbix_proxy -c "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}" -f;
+silent exec s6-setuidgid ${ZABBIX_USER} zabbix_proxy -c "${ZABBIX_PROXY_CONFIG_PATH}"/"${ZABBIX_PROXY_CONFIG_FILE}" -f;
