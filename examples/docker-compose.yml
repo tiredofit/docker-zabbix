@@ -3,7 +3,7 @@ services:
     
     zabbix-example-com-server:
       image: tiredofit/zabbix:latest
-      container_name: zabbix-selfdesign-server
+      container_name: zabbix-example-com-server
       ports:
         - 127.0.0.1:10051:10051
       volumes:
