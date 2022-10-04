@@ -1,3 +1,12 @@
+## 3.1.21 2022-10-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 6.2.3
+
+   ### Changed
+      - Change the way Zabbix repo is cloned in Dockerfile
+
+
 ## 3.1.20 2022-08-30 <dave at tiredofit dot ca>
 
    ### Added

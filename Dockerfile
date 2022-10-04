@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx-php-fpm:8.0
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults
-ENV ZABBIX_VERSION=6.2.2 \
+ENV ZABBIX_VERSION=6.2.3 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -14,7 +14,8 @@ ENV ZABBIX_VERSION=6.2.2 \
     IMAGE_REPO_URL="https://github.com/tiredofit/docker-zabbix/"
 
 ### Add Build Dependencies
-RUN set -x && \
+RUN source /assets/functions/00-container && \
+    set -x && \
     apk update && \
     apk upgrade && \
     apk add -t .zabbix-build-deps \
@@ -80,9 +81,7 @@ RUN set -x && \
     mkdir -p /usr/lib/zabbix/externalscripts && \
     mkdir -p /usr/share/doc/zabbix-server/sql/postgresql && \
     \
-    git clone https://github.com/zabbix/zabbix /usr/src/zabbix && \
-    cd /usr/src/zabbix && \
-    git checkout ${ZABBIX_VERSION} && \
+    clone_git_repo https://github.com/zabbix/zabbix ${ZABBIX_VERSION} && \
     sed -i "s|{ZABBIX_REVISION}|$(git log | head -n 1 | awk '{print $2}')|g" include/version.h  && \
     ./bootstrap.sh && \
     export CFLAGS="-fPIC -pie -Wl,-z,relro -Wl,-z,now" && \
