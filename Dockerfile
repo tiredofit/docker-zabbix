@@ -2,7 +2,7 @@ FROM docker.io/tiredofit/nginx-php-fpm:8.0
 LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
 
 ### Set Defaults
-ENV ZABBIX_VERSION=6.2.3 \
+ENV ZABBIX_VERSION=6.2.4 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -140,4 +140,4 @@ RUN source /assets/functions/00-container && \
     apk del .zabbix-build-deps && \
     rm -rf /var/cache/apk/*
 
-ADD install /
+COPY install /
