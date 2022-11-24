@@ -9,7 +9,7 @@ if [ -z $1 ];then
 	exit 1;
 fi
 
-expiration=$(whois ${domain} | egrep -i 'Expiry Date' | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}\/[0-9]{2}\/[0-9]{2}')
+expiration=$(whois ${domain} | grep -e -i 'Expiry Date' | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}\/[0-9]{2}\/[0-9]{2}')
 expirationseconds=$(date --date="${expiration//\//\-}" +%s)
 today=$(date +"%s")
 diff=$(($expirationseconds-$today))
