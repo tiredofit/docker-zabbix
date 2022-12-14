@@ -1,8 +1,12 @@
-FROM docker.io/tiredofit/nginx-php-fpm:8.0
-LABEL maintainer="Dave Conroy (dave at tiredofit dot ca)"
+ARG PHP_BASE=8.0
+ARG DISTRO="alpine"
 
-### Set Defaults
-ENV ZABBIX_VERSION=6.2.4 \
+FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}
+LABEL maintainer="Dave Conroy (github.com/tiredofit)"
+
+ARG ZABBIX_VERSION
+
+ENV ZABBIX_VERSION=${ZABBIX_VERSION:-"6.2.6"} \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -16,9 +20,9 @@ ENV ZABBIX_VERSION=6.2.4 \
 ### Add Build Dependencies
 RUN source /assets/functions/00-container && \
     set -x && \
-    apk update && \
-    apk upgrade && \
-    apk add -t .zabbix-build-deps \
+    package update && \
+    package upgrade && \
+    package install .zabbix-build-deps \
                 alpine-sdk \
                 autoconf \
                 automake \
@@ -39,10 +43,9 @@ RUN source /assets/functions/00-container && \
                 sqlite-dev \
                 unixodbc-dev \
                 && \
-    apk add -t .zabbix-run-deps \
+    package install .zabbix-run-deps \
                 chromium \
                 fping \
-                iputils \
                 iputils \
                 libcurl \
                 libevent \
@@ -65,21 +68,23 @@ RUN source /assets/functions/00-container && \
                 whois \
                 && \
     \
-    mkdir -p /etc/zabbix && \
-    mkdir -p /var/lib/zabbix && \
-    mkdir -p /var/lib/zabbix/enc && \
-    mkdir -p /var/lib/zabbix/export && \
-    mkdir -p /var/lib/zabbix/mibs && \
-    mkdir -p /var/lib/zabbix/modules && \
-    mkdir -p /var/lib/zabbix/snmptraps && \
-    mkdir -p /var/lib/zabbix/ssh_keys && \
-    mkdir -p /var/lib/zabbix/ssl && \
-    mkdir -p /var/lib/zabbix/ssl/certs && \
-    mkdir -p /var/lib/zabbix/ssl/keys && \
-    mkdir -p /var/lib/zabbix/ssl/ssl_ca && \
-    mkdir -p /usr/lib/zabbix/alertscripts && \
-    mkdir -p /usr/lib/zabbix/externalscripts && \
-    mkdir -p /usr/share/doc/zabbix-server/sql/postgresql && \
+    mkdir -p \
+            /etc/zabbix \
+            /usr/lib/zabbix/alertscripts \
+            /usr/lib/zabbix/externalscripts \
+            /usr/share/doc/zabbix-server/sql/postgresql \
+            /var/lib/zabbix \
+            /var/lib/zabbix/enc \
+            /var/lib/zabbix/export \
+            /var/lib/zabbix/mibs \
+            /var/lib/zabbix/modules \
+            /var/lib/zabbix/snmptraps \
+            /var/lib/zabbix/ssh_keys \
+            /var/lib/zabbix/ssl \
+            /var/lib/zabbix/ssl/certs \
+            /var/lib/zabbix/ssl/keys \
+            /var/lib/zabbix/ssl/ssl_ca \
+            && \
     \
     clone_git_repo https://github.com/zabbix/zabbix ${ZABBIX_VERSION} && \
     sed -i "s|{ZABBIX_REVISION}|$(git log | head -n 1 | awk '{print $2}')|g" include/version.h  && \
@@ -133,11 +138,18 @@ RUN source /assets/functions/00-container && \
     cp -R database/postgresql /usr/share/doc/zabbix-server/sql && \
     mv ui ${NGINX_WEBROOT} && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT} && \
-    rm -rf /usr/src/zabbix /tmp/* && \
-    chown --quiet -R zabbix:root /etc/zabbix/ /var/lib/zabbix/ && \
-    chgrp -R 0 /etc/zabbix/ /var/lib/zabbix/ && \
-    chmod -R g=u /etc/zabbix/ /var/lib/zabbix/ && \
-    apk del .zabbix-build-deps && \
-    rm -rf /var/cache/apk/*
+    rm -rf /usr/src/* \
+           /tmp/* && \
+    chown --quiet -R zabbix:root \
+                       /etc/zabbix/ \
+                       /var/lib/zabbix/ && \
+    chgrp -R 0 \
+              /etc/zabbix/ \
+              /var/lib/zabbix/ && \
+    chmod -R g=u \
+              /etc/zabbix/ \
+              /var/lib/zabbix/ && \
+    package remove .zabbix-build-deps && \
+    package cleanup
 
 COPY install /

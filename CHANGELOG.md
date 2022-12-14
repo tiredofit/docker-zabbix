@@ -1,3 +1,12 @@
+## 3.1.24 2022-12-14 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 6.2.6
+
+   ### Changed
+      - Refactor Dockerfile
+
+
 ## 3.1.23 2022-11-21 <dave at tiredofit dot ca>
 
    ### Added
