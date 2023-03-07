@@ -1,4 +1,4 @@
-ARG PHP_BASE=8.0
+ARG PHP_BASE=8.2
 ARG DISTRO="alpine"
 
 FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}
@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG ZABBIX_VERSION
 
-ENV ZABBIX_VERSION=${ZABBIX_VERSION:-"6.2.6"} \
+ENV ZABBIX_VERSION=${ZABBIX_VERSION:-"6.4.0"} \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \

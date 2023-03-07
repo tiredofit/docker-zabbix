@@ -1,3 +1,10 @@
+## 3.1.25 2023-03-07 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 6.4.0
+      - PHP 8.2 for Web Interface
+
+
 ## 3.1.24 2022-12-14 <dave at tiredofit dot ca>
 
    ### Added
