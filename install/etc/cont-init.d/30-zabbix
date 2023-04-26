@@ -6,6 +6,13 @@ source /assets/functions/30-zabbix
 
 PROCESS_NAME="zabbix"
 
+transform_file_var \
+                DB_HOST \
+                DB_NAME \
+                DB_PASS \
+                DB_PORT \
+                DB_USER
+
 case "${ZABBIX_MODE,,}" in
     "proxy" )
         print_debug "Zabbix Container Mode; Proxy"
