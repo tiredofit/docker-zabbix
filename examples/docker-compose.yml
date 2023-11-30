@@ -131,8 +131,8 @@ services:
         - DB_NAME=zabbix
         - DB_USER=zabbix
         - DB_PASS=password
-        - DB_DUMP_FREQ=1440
-        - DB_DUMP_BEGIN=0130
+        - DB01_BACKUP_INTERVAL=1440
+        - DB01_BACKUP_BEGIN=0130
         - DB_CLEANUP_TIME=8640
       networks:        
         - services
