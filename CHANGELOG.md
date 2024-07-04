@@ -1,3 +1,9 @@
+## 3.3.1 2024-07-04 <dave at tiredofit dot ca>
+
+   ### Added
+      - Add linux-headers to build deps
+
+
 ## 3.3.0 2024-06-04 <dave at tiredofit dot ca>
 
    ### Added

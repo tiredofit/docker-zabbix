@@ -34,6 +34,7 @@ RUN source /assets/functions/00-container && \
                 libevent-dev \
                 libssh-dev \
                 libxml2-dev \
+                linux-headers \
                 make \
                 net-snmp-dev \
                 openipmi-dev \
