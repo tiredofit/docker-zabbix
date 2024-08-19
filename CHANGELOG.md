@@ -1,3 +1,9 @@
+## 3.3.3 2024-08-19 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 7.0.3
+
+
 ## 3.3.2 2024-07-29 <dave at tiredofit dot ca>
 
    ### Added
