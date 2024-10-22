@@ -1,3 +1,10 @@
+## 3.3.5 2024-10-22 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 7.0.5
+      - pin to tiredofit/nginx-php-fpm:7.7-13
+
+
 ## 3.3.4 2024-09-25 <dave at tiredofit dot ca>
 
    ### Added
