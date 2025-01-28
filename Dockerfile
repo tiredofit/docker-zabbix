@@ -114,9 +114,32 @@ RUN source /assets/functions/00-container && \
                 --silent && \
     make -j"$(nproc)" -s dbschema && \
     make -j"$(nproc)" -s && \
+    ./configure \
+            --datadir=/usr/lib \
+            --libdir=/usr/lib/zabbix \
+            --prefix=/usr \
+            --sysconfdir=/etc/zabbix \
+            --enable-proxy \
+            --with-sqlite3 \
+            --with-ldap \
+            --with-libcurl \
+            --with-libxml2 \
+            --with-net-snmp \
+            --with-openipmi \
+            --with-openssl \
+            --with-ssh \
+            --with-unixodbc \
+            --enable-ipv6 \
+            --silent && \
+    make -j"$(nproc)" -s dbschema && \
+    make -j"$(nproc)" -s && \
     cp src/zabbix_proxy/zabbix_proxy /usr/sbin/zabbix_proxy && \
     cp src/zabbix_get/zabbix_get /usr/bin/zabbix_get && \
     cp src/zabbix_sender/zabbix_sender /usr/bin/zabbix_sender && \
+    cp src/zabbix_agent/zabbix_agentd /usr/sbin/zabbix_agentd && \
+    cp src/zabbix_get/zabbix_get /usr/sbin/zabbix_get && \
+    cp src/zabbix_sender/zabbix_sender /usr/sbin/zabbix_sender && \
+    cp src/go/bin/zabbix_agent2 /usr/sbin/zabbix_agent2 && \
     cp src/zabbix_server/zabbix_server /usr/sbin/zabbix_server && \
     cp -R /usr/src/zabbix/src/go/bin/zabbix_web_service /usr/sbin/zabbix_web_service && \
     cp -R database/postgresql /usr/share/doc/zabbix-server/sql && \

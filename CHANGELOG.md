@@ -1,3 +1,9 @@
+## 3.3.7 2025-01-28 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Restore building Zabbix Proxy
+
+
 ## 3.3.6 2025-01-28 <dave at tiredofit dot ca>
 
    ### Added
