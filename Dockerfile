@@ -1,12 +1,12 @@
-ARG PHP_BASE=8.2
+ARG PHP_BASE=8.3
 ARG DISTRO="alpine"
 
-FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}-7.7.13
+FROM docker.io/tiredofit/nginx-php-fpm:${PHP_BASE}-${DISTRO}-7.7.17
 LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG ZABBIX_VERSION
 
-ENV ZABBIX_VERSION=${ZABBIX_VERSION:-"7.0.5"} \
+ENV ZABBIX_VERSION=7.2.3 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -23,51 +23,51 @@ RUN source /assets/functions/00-container && \
     package update && \
     package upgrade && \
     package install .zabbix-build-deps \
-                alpine-sdk \
-                autoconf \
-                automake \
-                coreutils \
-                curl-dev \
-                g++ \
-                git \
-                go \
-                libevent-dev \
-                libssh-dev \
-                libxml2-dev \
-                linux-headers \
-                make \
-                net-snmp-dev \
-                openipmi-dev \
-                openldap-dev \
-                pcre-dev \
-                postgresql-dev \
-                sqlite-dev \
-                unixodbc-dev \
-                && \
+                    alpine-sdk \
+                    autoconf \
+                    automake \
+                    coreutils \
+                    curl-dev \
+                    g++ \
+                    git \
+                    go \
+                    libevent-dev \
+                    libssh-dev \
+                    libxml2-dev \
+                    linux-headers \
+                    make \
+                    net-snmp-dev \
+                    openipmi-dev \
+                    openldap-dev \
+                    pcre-dev \
+                    postgresql-dev \
+                    sqlite-dev \
+                    unixodbc-dev \
+                    && \
     package install .zabbix-run-deps \
-                chromium \
-                fping \
-                iputils \
-                libcurl \
-                libevent \
-                libldap \
-                libssh \
-                libxml2 \
-                net-snmp-agent-libs \
-                nmap \
-                openipmi-libs \
-                openssl \
-                pcre \
-                postgresql-client \
-                postgresql-libs \
-                py3-openssl \
-                py3-pip \
-                py3-requests \
-                python3 \
-                sqlite-libs \
-                unixodbc \
-                whois \
-                && \
+                    chromium \
+                    fping \
+                    iputils \
+                    libcurl \
+                    libevent \
+                    libldap \
+                    libssh \
+                    libxml2 \
+                    net-snmp-agent-libs \
+                    nmap \
+                    openipmi-libs \
+                    openssl \
+                    pcre \
+                    postgresql-client \
+                    postgresql-libs \
+                    py3-openssl \
+                    py3-pip \
+                    py3-requests \
+                    python3 \
+                    sqlite-libs \
+                    unixodbc \
+                    whois \
+                    && \
     \
     mkdir -p \
             /etc/zabbix \
@@ -86,49 +86,32 @@ RUN source /assets/functions/00-container && \
             /var/lib/zabbix/ssl/keys \
             /var/lib/zabbix/ssl/ssl_ca \
             && \
-    \
+            \
     clone_git_repo https://github.com/zabbix/zabbix ${ZABBIX_VERSION} && \
     sed -i "s|{ZABBIX_REVISION}|$(git log | head -n 1 | awk '{print $2}')|g" include/version.h  && \
     ./bootstrap.sh && \
     export CFLAGS="-fPIC -pie -Wl,-z,relro -Wl,-z,now" && \
+    sed -i "s|CGO_CFLAGS=\"\${CGO_CFLAGS}\"| CGO_CFLAGS=\"-D_LARGEFILE64_SOURCE \${CGO_CFLAGS}\"|g" /usr/src/zabbix/src/go/Makefile.am && \
     ./configure \
-            --datadir=/usr/lib \
-            --libdir=/usr/lib/zabbix \
-            --prefix=/usr \
-            --sysconfdir=/etc/zabbix \
-            --enable-agent \
-            --enable-server \
-            --enable-webservice \
-            --with-postgresql \
-            --with-ldap \
-            --with-libcurl \
-            --with-libxml2 \
-            --with-net-snmp \
-            --with-openipmi \
-            --with-openssl \
-            --with-ssh \
-            --with-unixodbc \
-            --enable-ipv6 \
-            --silent && \
-    make -j"$(nproc)" -s dbschema && \
-    make -j"$(nproc)" -s && \
-        ./configure \
-            --datadir=/usr/lib \
-            --libdir=/usr/lib/zabbix \
-            --prefix=/usr \
-            --sysconfdir=/etc/zabbix \
-            --enable-proxy \
-            --with-sqlite3 \
-            --with-ldap \
-            --with-libcurl \
-            --with-libxml2 \
-            --with-net-snmp \
-            --with-openipmi \
-            --with-openssl \
-            --with-ssh \
-            --with-unixodbc \
-            --enable-ipv6 \
-            --silent && \
+                --datadir=/usr/lib \
+                --libdir=/usr/lib/zabbix \
+                --prefix=/usr \
+                --sysconfdir=/etc/zabbix \
+                --enable-agent \
+                --enable-agent2 \
+                --enable-server \
+                --enable-webservice \
+                --with-postgresql \
+                --with-ldap \
+                --with-libcurl \
+                --with-libxml2 \
+                --with-net-snmp \
+                --with-openipmi \
+                --with-openssl \
+                --with-ssh \
+                --with-unixodbc \
+                --enable-ipv6 \
+                --silent && \
     make -j"$(nproc)" -s dbschema && \
     make -j"$(nproc)" -s && \
     cp src/zabbix_proxy/zabbix_proxy /usr/sbin/zabbix_proxy && \
@@ -140,16 +123,17 @@ RUN source /assets/functions/00-container && \
     mv ui ${NGINX_WEBROOT} && \
     chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT} && \
     rm -rf /usr/src/* \
-           /tmp/* && \
+            /tmp/* \
+            && \
     chown --quiet -R zabbix:root \
-                       /etc/zabbix/ \
-                       /var/lib/zabbix/ && \
+                        /etc/zabbix/ \
+                        /var/lib/zabbix/ && \
     chgrp -R 0 \
-              /etc/zabbix/ \
-              /var/lib/zabbix/ && \
+                /etc/zabbix/ \
+                /var/lib/zabbix/ && \
     chmod -R g=u \
-              /etc/zabbix/ \
-              /var/lib/zabbix/ && \
+                /etc/zabbix/ \
+                /var/lib/zabbix/ && \
     package remove .zabbix-build-deps && \
     package cleanup
 

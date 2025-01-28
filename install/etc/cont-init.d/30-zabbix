@@ -4,7 +4,7 @@ source /assets/functions/00-container
 source /assets/defaults/zabbix
 source /assets/functions/30-zabbix
 
-PROCESS_NAME="zabbix"
+SERVICE_NAME="zabbix"
 
 transform_file_var \
                 DB_HOST \

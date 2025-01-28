@@ -3,7 +3,7 @@
 source /assets/functions/00-container
 source /assets/defaults/zabbix
 source /assets/defaults/zabbix-webservice
-PROCESS_NAME="zabbix-webservice"
+SERVICE_NAME="zabbix-webservice"
 
 check_container_initialized
 liftoff

@@ -1,3 +1,11 @@
+## 3.3.6 2025-01-28 <dave at tiredofit dot ca>
+
+   ### Added
+      - Switch to PHP 8.3 for WebUI
+      - Zabbix 7.2.3
+      - Start building Zabbix Agent and Agent 2 overtop of image to account for any version differences
+
+
 ## 3.3.5 2024-10-22 <dave at tiredofit dot ca>
 
    ### Added
