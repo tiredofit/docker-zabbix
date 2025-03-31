@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG ZABBIX_VERSION
 
-ENV ZABBIX_VERSION=7.2.4 \
+ENV ZABBIX_VERSION=7.2.5 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -69,6 +69,10 @@ RUN source /assets/functions/00-container && \
                     whois \
                     && \
     \
+    php-ext prepare && \
+    php-ext reset && \
+    php-ext enable core && \
+    php-ext enable core && \
     mkdir -p \
             /etc/zabbix \
             /usr/lib/zabbix/alertscripts \
