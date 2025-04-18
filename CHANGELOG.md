@@ -1,3 +1,9 @@
+## 3.4.1 2025-04-17 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Downgrade to 7.2.5
+
+
 ## 3.4.0 2025-04-17 <dave at tiredofit dot ca>
 
    ### Added
