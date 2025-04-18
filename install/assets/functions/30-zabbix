@@ -3,27 +3,27 @@
 configure_zabbix_proxy() {
     if [ "${ZABBIX_PROXY_SETUP_TYPE,,}" = "auto" ] ; then
         print_info "Configuring Zabbix Proxy"
-        if [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_ID}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] || [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] ; then
+        if [ -n "${ZABBIX_PROXY_TLS_PSK_IDENTITY}" ] || [ -n "${ZABBIX_PROXY_TLS_PSK_KEY}" ] || [ -n "${ZABBIX_PROXY_TLS_PSK_FILE}" ] ; then
             print_debug "Zabbix Proxy - Using PSK Encryption"
-            if [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] && [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] ; then
+            if [ ! -n "${ZABBIX_PROXY_TLS_PSK_FILE}" ] && [ ! -n "${ZABBIX_PROXY_TLS_PSK_KEY}" ] ; then
                 print_error "You've selected Zabbix Proxy PSK Encryption but haven't supplied a file or a Key!"
                 exit 1
             fi
 
-            if [ ! -n "${ZABBIX_PROXY_ENCRYPT_PSK_FILE}" ] && [ -n "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" ] ; then
+            if [ ! -n "${ZABBIX_PROXY_TLS_PSK_FILE}" ] && [ -n "${ZABBIX_PROXY_TLS_PSK_KEY}" ] ; then
                 print_debug "Zabbix Proxy - Only have PSK via ENV Var (Automated creation of file)"
-                # libreoffice/openssl rand -hex 32 = 256bit
+                # openssl rand -hex 32 = 256bit
                 mkdir -p ${ZABBIX_CERT_PATH}
-                ZABBIX_PROXY_ENCRYPT_PSK_FILE="zabbix_proxy.psk"
-                echo "${ZABBIX_PROXY_ENCRYPT_PSK_KEY}" > "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_ENCRYPT_PSK_FILE}"
+                ZABBIX_PROXY_TLS_PSK_FILE="zabbix_proxy.psk"
+                echo "${ZABBIX_PROXY_TLS_PSK_KEY}" > "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_TLS_PSK_FILE}"
             fi
 
-            chmod -f 0600 "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_ENCRYPT_PSK_FILE}"
+            chmod -f 0600 "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_TLS_PSK_FILE}"
             chown -f -R "${ZABBIX_USER}" "${ZABBIX_CERT_PATH}"
             tls_psk=$(cat<<EOF
 TLSConnect=psk
-TLSPSKIdentity=${ZABBIX_PROXY_ENCRYPT_PSK_ID}
-TLSPSKFile=${ZABBIX_CERT_PATH}/${ZABBIX_PROXY_ENCRYPT_PSK_FILE}
+TLSPSKIdentity=${ZABBIX_PROXY_TLS_PSK_IDENTITY}
+TLSPSKFile=${ZABBIX_CERT_PATH}/${ZABBIX_PROXY_TLS_PSK_FILE}
 EOF
             )
         fi
@@ -77,6 +77,35 @@ SSHKeyLocation=/var/lib/zabbix/ssh_keys
 SSLCertLocation=/var/lib/zabbix/ssl/certs/
 SSLKeyLocation=/var/lib/zabbix/ssl/keys/
 SSLCALocation=/var/lib/zabbix/ssl/ssl_ca/
+
+TLSConnect=${ZABBIX_PROXY_TLS_CONNECT}
+TLSAccept=${ZABBIX_PROXY_TLS_ACCEPT}
+TLSCAFile=${ZABBIX_PROXY_TLS_CA_FILE}
+TLSCRLFile=${ZABBIX_PROXY_TLS_CRL_FILE}
+TLSServerCertIssuer=${ZABBIX_PROXY_TLS_SERVER_CERT_ISSUER}
+TLSServerCertSubject=${ZABBIX_PROXY_TLS_SERVER_CRT_SUBJECT}
+TLSCertFile=${ZABBIX_PROXY_TLS_CERT_FILE}
+TLSKeyFile=${ZABBIX_PROXY_TLS_KEY_FILE}
+TLSCipherCert13=${ZABBIX_PROXY_TLS_CIPHER_CERT13}
+TLSCipherCert=${ZABBIX_PROXY_TLS_CIPHER_CERT}
+TLSCipherPSK13=${ZABBIX_PROXY_TLS_CIPHER_PSK13}
+TLSCipherPSK=${ZABBIX_PROXY_TLS_CIPHER_PSK}
+TLSCipherAll13=${ZABBIX_PROXY_TLS_CIPHER_ALL13}
+TLSCipherAll=${ZABBIX_PROXY_TLS_CIPHER_ALL}
+DBTLSConnect=${ZABBIX_PROXY_DB_TLS_CONNECT}
+DBTLSCAFile=${ZABBIX_PROXY_DB_TLS_CA_FILE}
+DBTLSCertFile=${ZABBIX_PROXY_DB_TLS_CERT_FILE}
+DBTLSKeyFile=${ZABBIX_PROXY_DB_TLS_KEY_FILE}
+DBTLSCipher=${ZABBIX_PROXY_DB_TLS_CIPHER}
+DBTLSCipher13=${ZABBIX_PROXY_DB_TLS_CIPHER13}
+Vault=${ZABBIX_PROXY_VAULT}
+VaultToken=${ZABBIX_PROXY_VAULT_TOKEN}
+VaultURL=${ZABBIX_PROXY_VAULT_URL}
+VaultPrefix=${ZABBIX_PROXY_VAULT_PREFIX}
+VaultDBPath=${ZABBIX_PROXY_VAULT_DB_PATH}
+VaultTLSCertFile=${ZABBIX_PROXY_VAULT_TLS_CERT_FILE}
+VaultTLSKeyFile=${ZABBIX_PROXY_VAULT_TLS_KEY_FILE}
+
 LoadModulePath=/var/lib/zabbix/modules/
 
 ${tls_psk}

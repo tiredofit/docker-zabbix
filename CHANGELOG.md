@@ -1,3 +1,13 @@
+## 3.4.0 2025-04-17 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 7.2.6
+
+   ### Changed
+      - Rework Zabbix Proxy options and add variables for TLS and VAULT
+      - Rename old Proxy variables of ZABBIX_PROXY_ENCRYPT_ > ZABBIX_PROXY_TLS
+
+
 ## 3.3.9 2025-03-31 <dave at tiredofit dot ca>
 
    ### Added
