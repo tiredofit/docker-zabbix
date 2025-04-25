@@ -6,7 +6,7 @@ LABEL maintainer="Dave Conroy (github.com/tiredofit)"
 
 ARG ZABBIX_VERSION
 
-ENV ZABBIX_VERSION=7.2.5 \
+ENV ZABBIX_VERSION=7.2.6 \
     PHP_ENABLE_LDAP=TRUE \
     PHP_ENABLE_CREATE_SAMPLE_PHP=FALSE \
     PHP_ENABLE_SOCKETS=TRUE \
@@ -147,8 +147,8 @@ RUN source /assets/functions/00-container && \
     cp src/zabbix_server/zabbix_server /usr/sbin/zabbix_server && \
     cp -R /usr/src/zabbix/src/go/bin/zabbix_web_service /usr/sbin/zabbix_web_service && \
     cp -R database/postgresql /usr/share/doc/zabbix-server/sql && \
-    mv ui ${NGINX_WEBROOT} && \
-    chown -R ${NGINX_USER}:${NGINX_GROUP} ${NGINX_WEBROOT} && \
+    mv ui "${NGINX_WEBROOT}" && \
+    chown -R "${NGINX_USER}":"${NGINX_GROUP}" "${NGINX_WEBROOT}" && \
     rm -rf /usr/src/* \
             /tmp/* \
             && \

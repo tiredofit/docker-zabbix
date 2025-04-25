@@ -1,3 +1,12 @@
+## 3.4.2 2025-04-24 <dave at tiredofit dot ca>
+
+   ### Added
+      - Zabbix 7.2.6
+
+   ### Changed
+      - Rework functions to only write to configuration items if variable is set
+
+
 ## 3.4.1 2025-04-17 <dave at tiredofit dot ca>
 
    ### Changed
