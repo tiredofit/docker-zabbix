@@ -29,11 +29,13 @@ configure_zabbix_proxy() {
                 print_error "ZABBIX_PROXY_TLS_PSK_FILE set but does not exist or inaccessible!"
                 exit 1
             fi
+            ZABBIX_PROXY_TLS_CONNECT="psk"
             tls_psk=$(cat<<EOF
+
 ## TLS PSK Settings
-TLSConnect=psk
 TLSPSKIdentity=${ZABBIX_PROXY_TLS_PSK_IDENTITY}
 TLSPSKFile=${ZABBIX_PROXY_TLS_PSK_FILE}
+
 EOF
             )
         fi
@@ -97,6 +99,7 @@ EOF
         write_config_value "${config_file}" "ZABBIX_PROXY_TIMEOUT" "Timeout"
         write_config_value "${config_file}" "ZABBIX_PROXY_TIMEOUT_TRAPPER" "TrapperTimeout"
         write_config_value "${config_file}" "ZABBIX_PROXY_TLS_ACCEPT" "TLSAccept"
+        write_config_value "${config_file}" "ZABBIX_PROXY_TLS_CONNECT" "TLSConnect"
         write_config_value "${config_file}" "ZABBIX_PROXY_TLS_CA_FILE" "TLSCAFile"
         write_config_value "${config_file}" "ZABBIX_PROXY_TLS_CERT_FILE" "TLSCertFile"
         write_config_value "${config_file}" "ZABBIX_PROXY_TLS_CIPHER_ALL" "TLSCipherAll"

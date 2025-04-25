@@ -1,3 +1,9 @@
+## 3.4.3 2025-04-24 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Readd ZABBIX_PROXY_TLS_CONNECT variable to work
+
+
 ## 3.4.2 2025-04-24 <dave at tiredofit dot ca>
 
    ### Added
