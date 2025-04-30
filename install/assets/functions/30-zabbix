@@ -17,8 +17,8 @@ configure_zabbix_proxy() {
                 # openssl rand -hex 32 = 256bit
                 ZABBIX_PROXY_TLS_PSK_FILE="${ZABBIX_CERT_PATH}/zabbix_proxy.psk"
                 mkdir -p "${ZABBIX_CERT_PATH}"
-                echo "${ZABBIX_PROXY_TLS_PSK_KEY}" > "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_TLS_PSK_FILE}"
-                chmod -f 0600 "${ZABBIX_CERT_PATH}"/"${ZABBIX_PROXY_TLS_PSK_FILE}"
+                echo "${ZABBIX_PROXY_TLS_PSK_KEY}" > "${ZABBIX_PROXY_TLS_PSK_FILE}"
+                chmod -f 0600 "${ZABBIX_PROXY_TLS_PSK_FILE}"
                 chown -f -R "${ZABBIX_USER}" "${ZABBIX_CERT_PATH}"
             fi
 
