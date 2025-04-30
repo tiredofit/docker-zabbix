@@ -1,3 +1,9 @@
+## 3.4.4 2025-04-30 <fermion2020@github>
+
+   ### Changed
+      - Fix Zabbix PSK Path autogeneration
+
+
 ## 3.4.3 2025-04-24 <dave at tiredofit dot ca>
 
    ### Changed
