@@ -1,3 +1,10 @@
+## 3.4.5 2025-05-20 <dave at tiredofit dot ca>
+
+   ### Added
+      - Pin to tiredofit/nginx-php-fpm:7.7.19
+      - Zabbix 7.2.7
+
+
 ## 3.4.4 2025-04-30 <fermion2020@github>
 
    ### Changed
