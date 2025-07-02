@@ -39,7 +39,7 @@ RUN source /assets/functions/00-container && \
                     net-snmp-dev \
                     openipmi-dev \
                     openldap-dev \
-                    pcre-dev \
+                    pcre2-dev \
                     postgresql-dev \
                     sqlite-dev \
                     unixodbc-dev \
@@ -57,7 +57,7 @@ RUN source /assets/functions/00-container && \
                     nmap \
                     openipmi-libs \
                     openssl \
-                    pcre \
+                    pcre2 \
                     postgresql-client \
                     postgresql-libs \
                     py3-openssl \

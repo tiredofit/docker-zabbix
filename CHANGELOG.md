@@ -1,3 +1,9 @@
+## 3.4.10 2025-07-02 <dave at tiredofit dot ca>
+
+   ### Changed
+      - Swap PCRE for PCRE2
+
+
 ## 3.4.9 2025-07-02 <dave at tiredofit dot ca>
 
    ### Added
